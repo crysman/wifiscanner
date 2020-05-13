@@ -1,15 +1,16 @@
 #!/bin/bash
-#scans all Wi-Fi channels and prints terminal-graphically its occupation
+#scans all 2.4GHz Wi-Fi channels and prints their occupation
 #(this source code sucks and should be rewritten, but you got the idea...)
+#version 0.1a
 
-BARCHAR="❚"
+BARCHAR="#"
+##BARCHAR="❚"
 maxch=13
-aChannels=`iwlist wlp3s0 scan | grep \(Channel | grep -Eo "[0-9]+)$" | tr -d ")" | sort -n`
-uChannels=`echo "$aChannels" | sort | uniq`
-test $maxch -gt 0 || exit 99
+aChannels=`iwlist wlp3s0 scan | grep "[[:space:]]GHz[[:space:]](" | grep -Eo "[0-9]+)$" | tr -d ")" | sort -n`
+test -n "$aChannels" || exit 1
 
 echo ${aChannels}
-echo "---"
+echo "-----"
 
 declare -A Stats
 for (( i=1;i<=${maxch};i++ )); do
